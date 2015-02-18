@@ -1,7 +1,19 @@
+var debug = require("debug")("main")
 var mergeFiles = require("./mergeFiles")
 var sendMessage = require("./sendMessage")
 
 var CronJob = require('cron').CronJob;
+
+debug("cronscripts running")
+
+var job = new CronJob({
+  cronTime: '0 12 * * *',
+  onTick: function() {
+    debug("it's noon")
+  },
+  start: true,
+  timeZone: "America/New_York"
+});
 
 var job = new CronJob({
   cronTime: '0 12 14 * *',
