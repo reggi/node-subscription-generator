@@ -1,1 +1,1 @@
-worker: DEBUG=* npm start
+worker: npm run start

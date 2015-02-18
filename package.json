@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "DEBUG=* node ./index.js",
     "kits": "DEBUG=* node ./bash.js ./mergeFiles.js welcome-kit --promise",
     "subs": "DEBUG=* node ./bash.js ./mergeFiles.js subscription --promise",
     "test": "echo \"Error: no test specified\" && exit 1"
