@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "kits": "DEBUG=* node ./bash.js ./mergeFiles.js welcome-kit --promise",
+    "subs": "DEBUG=* node ./bash.js ./mergeFiles.js subscription --promise",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,12 +13,14 @@
   "dependencies": {
     "bluebird": "^2.9.9",
     "chargebee": "^1.1.6",
+    "cron": "^1.0.6",
     "csv": "^0.4.1",
     "debug": "^2.1.1",
     "dotty": "0.0.2",
     "express": "^4.11.2",
     "googleapis": "^1.1.3",
     "lodash": "^3.2.0",
+    "minimist": "^1.1.0",
     "moment": "^2.9.0",
     "refresh-token": "^0.1.0",
     "request": "^2.53.0",

@@ -21,7 +21,7 @@ app.get('/google', function (req, res) {
 
 app.get('/oauth2callback', function (req, res) {
   return oauth2Client.getToken(req.query.code).then(function(tokens){
-    fs.writeFileAsync("./tokens.json", JSON.stringify(tokens), "utf8");
+    fs.writeFileAsync("./tokens.json", JSON.stringify(tokens, undefined, 2), "utf8");
     return res.json(tokens)
   }).catch(function(err){
     return res.redirect("/google")

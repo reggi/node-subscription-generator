@@ -1,7 +1,56 @@
-var oauth2Client = require("./oauth2Client")
 var mergeFiles = require("./mergeFiles")
-var accessToken = oauth2Client.credentials.access_token
+var sendMessage = require("./sendMessage")
 
-mergeFiles(accessToken).then(function(files){
-  console.log(files)
-})
+var CronJob = require('cron').CronJob;
+
+var job = new CronJob({
+  cronTime: '0 12 14 * *',
+  onTick: function() {
+    // runs every 14th
+    var sendMessage = require("./sendMessage")
+    var message = [
+      "@pforti @michaelrad @tylea @reggi",
+      "subscriptions",
+      "are going to be generated noon tomorrow."
+    ].join(" ")
+    sendMessage("#subscription", message)
+  },
+  start: true,
+  timeZone: "America/New_York"
+});
+
+var job = new CronJob({
+  cronTime: '0 12 15 * *',
+  onTick: function() {
+    // runs every 15th
+    mergeFiles("subscription")
+  },
+  start: true,
+  timeZone: "America/New_York"
+});
+
+var job = new CronJob({
+  cronTime: '0 12 * * 2',
+  onTick: function() {
+    // runs every 14th
+    var sendMessage = require("./sendMessage")
+    var message = [
+      "@tylea @reggi",
+      "welcome kits",
+      "are going to be generated noon tomorrow."
+    ].join(" ")
+    sendMessage("#subscription", message)
+  },
+  start: true,
+  timeZone: "America/New_York"
+});
+
+var job = new CronJob({
+  cronTime: '0 12 * * 3',
+  onTick: function() {
+    // runs every wendsday
+    mergeFiles("welcome-kits")
+  },
+  start: true,
+  timeZone: "America/New_York"
+});
