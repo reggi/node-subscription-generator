@@ -2,12 +2,21 @@ var debug = require("debug")("main")
 var mergeFiles = require("./mergeFiles")
 var sendMessage = require("./sendMessage")
 
+var crontabs = {
+  "onNoon": "0 12 * * *",
+  "onFourteen": "0 12 14 * *",
+  "onFifteen": "0 12 15 * *",
+  "onTuesday": "0 12 * * 2",
+  "onWednesday": "0 12 * * 3",
+}
+
+
 var CronJob = require('cron').CronJob;
 
 debug("cronscripts running")
 
 var job = new CronJob({
-  cronTime: '0 12 * * *',
+  cronTime: crontabs["onNoon"],
   onTick: function() {
     debug("it's noon")
   },
@@ -16,7 +25,7 @@ var job = new CronJob({
 });
 
 var job = new CronJob({
-  cronTime: '0 12 14 * *',
+  cronTime: crontabs["onFourteen"],
   onTick: function() {
     // runs every 14th
     var sendMessage = require("./sendMessage")
@@ -32,7 +41,7 @@ var job = new CronJob({
 });
 
 var job = new CronJob({
-  cronTime: '0 12 15 * *',
+  cronTime: crontabs["onFifteen"],
   onTick: function() {
     // runs every 15th
     mergeFiles("subscription")
@@ -42,7 +51,7 @@ var job = new CronJob({
 });
 
 var job = new CronJob({
-  cronTime: '0 12 * * 2',
+  cronTime: crontabs["onTuesday"],
   onTick: function() {
     // runs every 14th
     var sendMessage = require("./sendMessage")
@@ -58,10 +67,10 @@ var job = new CronJob({
 });
 
 var job = new CronJob({
-  cronTime: '0 12 * * 3',
+  cronTime: crontabs["onWednesday"],
   onTick: function() {
     // runs every wendsday
-    mergeFiles("welcome-kits")
+    mergeFiles("welcome-kit")
   },
   start: true,
   timeZone: "America/New_York"
