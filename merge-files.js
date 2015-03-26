@@ -35,7 +35,6 @@ function chargebeeGet(start, end){
   .then(organizeSubs)
 }
 
-
 function insert(drive, item){
   debug("inserting google drive file")
   return drive.files.insertAsync({
