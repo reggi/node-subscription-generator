@@ -4,8 +4,12 @@ var app = express()
 
 var google = require('googleapis')
 var OAuth2 = google.auth.OAuth2
-var clientSecrets = require("./client_secrets.json")
-var oauth2Client = new OAuth2(clientSecrets.web.client_id, clientSecrets.web.client_secret, clientSecrets.web.redirect_uris[0]);
+
+var cid = process.env.GOOGLE_DRIVE_WEB_CLIENT_ID
+var cs = process.env.GOOGLE_DRIVE_WEB_CLIENT_SECRET
+var curi = process.env.GOOGLE_DRIVE_WEB_REDIRECT_URI
+
+var oauth2Client = new OAuth2(cid, cs, curi)
 oauth2Client.getToken = Promise.promisify(oauth2Client.getToken)
 
 var fs = Promise.promisifyAll(require("fs"))

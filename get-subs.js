@@ -2,9 +2,12 @@ var _ = require("underscore")
 var Promise = require("bluebird")
 var chargebee = require("chargebee")
 
+var cbkey = process.env.CHARGEBEE_API_KEY
+var cbsite = process.env.CHARGEBEE_SITE
+
 chargebee.configure({
-  site : process.env.CHARGEBEE_SITE,
-  api_key : process.env.CHARGEBEE_API_KEY
+  site : cbsite,
+  api_key : cbkey
 });
 
 function getSet(offset){

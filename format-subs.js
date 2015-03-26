@@ -3,6 +3,7 @@ var _ = require("underscore")
 function assignDefault(subscription){
   var defaults = {
     "subscription":{
+      "id": "",
       "shipping_address":{
         "first_name": "",
         "last_name": "",
@@ -39,6 +40,7 @@ function formatSub(subscription){
   format['addresses.country'] = subscription.subscription.shipping_address.country
   format['addresses.zip'] = subscription.subscription.shipping_address.zip
   format['customers.cf_gift_from'] = subscription.customer.cf_gift_from
+  format['subscription.id'] = subscription.subscription.id
   return format
 }
 

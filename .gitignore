@@ -1,2 +1,6 @@
 node_modules
 .DS_Store
+welcomekit.json
+tokens.json
+client_secrets.json
+.env

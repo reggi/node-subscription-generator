@@ -1,20 +1,21 @@
 var Promise = require("bluebird")
 var request = Promise.promisify(require("request"))
 
+var slackkey = process.env.SLACK_KEY
+var slackuser = process.env.SLACK_USER
+var slackimg = process.env.SLACK_IMAGE
+
 function sendMessage(channel, message){
   return request({
     "method": "POST",
     "url": "https://slack.com/api/chat.postMessage",
     "json": true,
     "form": {
-      token: process.env.SLACK_KEY,
+      token: slackkey,
       text: message,
       channel: channel,
-      username: process.env.SLACK_USER,
-      icon_url: process.env.SLACK_IMAGE
-      //icon_url:process.env.SLACK_IMAGE
-      //icon_url: process.env.SLACK_IMAGE,
-      //icon_url: process.env.SLACK_IMAGE
+      username: slackuser,
+      icon_url: slackimg
     }
   }).spread(function(response, body) {
     return body;

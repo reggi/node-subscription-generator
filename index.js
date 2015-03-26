@@ -1,6 +1,6 @@
 var debug = require("debug")("main")
-var mergeFiles = require("./mergeFiles")
-var sendMessage = require("./sendMessage")
+var mergeFiles = require("./merge-files")
+var sendMessage = require("./send-message")
 
 var crontabs = {
   "onNoon": "0 12 * * *",
@@ -9,7 +9,6 @@ var crontabs = {
   "onTuesday": "0 12 * * 2",
   "onWednesday": "0 12 * * 3",
 }
-
 
 var CronJob = require('cron').CronJob;
 

@@ -4,10 +4,13 @@ var moment = require("moment")
 var tokens = require("./tokens.json")
 var google = require('googleapis')
 var OAuth2 = google.auth.OAuth2
-var clientSecrets = require("./client_secrets.json")
+
+var cid = process.env.GOOGLE_DRIVE_WEB_CLIENT_ID
+var cs = process.env.GOOGLE_DRIVE_WEB_CLIENT_SECRET
+var curi = process.env.GOOGLE_DRIVE_WEB_REDIRECT_URI
 
 function getOauth2Client(){
-  var oauth2Client = new OAuth2(clientSecrets.web.client_id, clientSecrets.web.client_secret, clientSecrets.web.redirect_uris[0]);
+  var oauth2Client = new OAuth2(cid, cs, curi);
   oauth2Client.refreshAccessToken = Promise.promisify(oauth2Client.refreshAccessToken)
   oauth2Client.setCredentials({
     access_token: tokens.access_token,
