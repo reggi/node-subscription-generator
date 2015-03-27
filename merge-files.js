@@ -10,7 +10,7 @@ var Promise = require("bluebird")
 var moment = require("moment")
 var fs = Promise.promisifyAll(require("fs"))
 var csv = Promise.promisifyAll(require("csv"))
-var getAuthClient = require("./auth-Client")
+var getAuthClient = require("./auth-client")
 var google = require('googleapis')
 
 var uloadparent = process.env.GOOGLE_DRIVE_UPLOAD_PARENT_ID
