@@ -1,4 +1,4 @@
-# Cron + Chargebee + Google drive + Slack
+# Cron + Chargebee + Google Drive + Slack
 
 This is a pice of software I made to automate some of the more manual tasks that take place behind the scenes at the Holstee office.
 
@@ -6,13 +6,13 @@ At Holstee we have a product we offer called the [Mindful Art Subscription](http
 
 On the technical side we use a piece of software called [ChargeBee](https://www.chargebee.com/) which manages the subscriptions and payment processing.
 
-At Holstee we found the need to have wholesale spreadsheets containing subscriptions that lived outside of ChargeBee. 
+At Holstee we found the need to have wholesale spreadsheets containing subscriptions that lived outside of ChargeBee.
 
 This software does a couple of things
 
-* Pulls in subscriptions from specified google drive spreadsheets 
+* Pulls in subscriptions from specified google drive spreadsheets
 * Pulls in subscriptions from ChargeBee
-* Organizes an export spreadsheet to send to the fulfillment center ([with specific / necessary columns](https://github.com/reggi/node-subscription-generator/blob/master/format-subs.js#L32-L42)) 
+* Organizes an export spreadsheet to send to the fulfillment center ([with specific / necessary columns](https://github.com/reggi/node-subscription-generator/blob/master/format-subs.js#L32-L42))
 * Compiles a list of numbers and [counts](https://github.com/reggi/node-subscription-generator/blob/master/merge-files.js#L169-L185) for [specific cases](https://github.com/reggi/node-subscription-generator/blob/master/filter-subs.js#L40-L105) that we can send off to our accountants.
 * Runs and gathers these things at set intervals (once a week / once a month).
 * Sends a slack message with create google drive urls.
@@ -43,7 +43,7 @@ This software does a couple of things
     * Create another `help` spreadsheet export with links to chargebee subs
     * Loop over all exports (`main`,`report`,`help`) and push them to google drive
     * Slack message goes out with all of the urls to the new exported docs
-    
+
 ## Environment Variables
 
 This project is hosted on Heroku. So I have a remote for Heroku set up locally. I have a `.env` file that sets all the environment variables and I can used `heroku config:push` to upload all of the `.env` variables to the server. I can always use `heroku config:pull` to get them back if starting from this bare repo.
