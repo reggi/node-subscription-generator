@@ -12,10 +12,10 @@ This software does a couple of things
 
 * Pulls in subscriptions from specified google drive spreadsheets 
 * Pulls in subscriptions from ChargeBee
-* Organizes an export spreadsheet to send to the fulfillment center 
-* Compiles a list of numbers and [counts](https://github.com/reggi/node-subscription-generator/blob/master/merge-files.js#L169-L185) for [specific cases](https://github.com/reggi/node-subscription-generator/blob/master/filter-subs.js#L40-L105) that we can send off to our accountants
-* Runs and gathers these things at set intervals (once a week / once a month)
-* Sends a slack message with create google drive urls
+* Organizes an export spreadsheet to send to the fulfillment center ([with specific / necessary columns](https://github.com/reggi/node-subscription-generator/blob/master/format-subs.js#L32-L42)) 
+* Compiles a list of numbers and [counts](https://github.com/reggi/node-subscription-generator/blob/master/merge-files.js#L169-L185) for [specific cases](https://github.com/reggi/node-subscription-generator/blob/master/filter-subs.js#L40-L105) that we can send off to our accountants.
+* Runs and gathers these things at set intervals (once a week / once a month).
+* Sends a slack message with create google drive urls.
 
 ## Technical Process
 
