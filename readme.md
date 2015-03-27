@@ -1,4 +1,6 @@
-# Cron + Chargebee + Google Drive + Slack
+# Subscription Generator
+
+> Cron + Chargebee + Google Drive + Slack
 
 This is a pice of software I made to automate some of the more manual tasks that take place behind the scenes at the Holstee office.
 
