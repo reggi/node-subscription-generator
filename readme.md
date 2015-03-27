@@ -1,5 +1,24 @@
 # Cron + Chargebee + Google drive + Slack
 
+This is a pice of software I made to automate some of the more manual tasks that take place behind the scenes at the Holstee office.
+
+At Holstee we have a product we offer called the [Mindful Art Subscription](https://www.holstee.com/pages/subscription) it's a service where we mail you a greeting card on a monthly basis.
+
+On the technical side we use a piece of software called [ChargeBee](https://www.chargebee.com/) which manages the subscriptions and payment processing.
+
+At Holstee we found the need to have wholesale spreadsheets containing subscriptions that lived outside of ChargeBee. 
+
+This software does a couple of things
+
+* Pulls in subscriptions from specified google drive spreadsheets 
+* Pulls in subscriptions from ChargeBee
+* Organizes an export spreadsheet to send to the fulfillment center 
+* Compiles a list of numbers and [counts](https://github.com/reggi/node-subscription-generator/blob/master/merge-files.js#L169-L185) for [specific cases](https://github.com/reggi/node-subscription-generator/blob/master/filter-subs.js#L40-L105) that we can send off to our accountants
+* Runs and gathers these things at set intervals (once a week / once a month)
+* Sends a slack message with create google drive urls
+
+## Technical Process
+
 * `index.js` uses `[node-cron](https://github.com/ncb000gt/node-cron)` to run `merge-files.js` at interval times
 * There are five crontabs running
   * `"onNoon": "0 12 * * *"` (the test runs everyday)
@@ -98,3 +117,9 @@ heroku config:pull
 ```
 git push heroku master
 ```
+
+## Extra thoughts
+
+* Thoughts about programmatically emailing fulfillment center directly, closing the entire loop
+* In the beginning I was manually downloading an export of subscriptions from ChargeBee, piecing all the docs together and it was a mess. I'd forget to do it some days, creating delays where the customers would receive shipments later then expected, which is totally unacceptable.
+* The simple process of taking a spreadsheet and filtering the columns you want is a super tedious process itself.
