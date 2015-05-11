@@ -4,9 +4,9 @@
   "description": "This is a pice of software I made to automate some of the more manual tasks that take place behind the scenes at the Holstee office.",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG=* node ./index.js",
-    "kits": "export $(cat ./.env | grep -v ^# | xargs) && DEBUG=* node bash.js ./merge-files.js \"welcome-kit\" --promise",
-    "subs": "export $(cat ./.env | grep -v ^# | xargs) && DEBUG=* node bash.js ./merge-files.js \"subscription\" --promise",
+    "start": "node ./index.js",
+    "kit": "foreman run node ./bash.js ./merge-files.js welcome-kit --promise",
+    "sub": "foreman run node ./bash.js ./merge-files.js subscription --promise",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Thomas Reggi",
