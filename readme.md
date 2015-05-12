@@ -21,7 +21,7 @@ This software does a couple of things
 
 ## Technical Process
 
-* `index.js` uses `[node-cron](https://github.com/ncb000gt/node-cron)` to run `merge-files.js` at interval times
+* `index.js` uses [`node-cron`](https://github.com/ncb000gt/node-cron) to run `merge-files.js` at interval times
 * There are five crontabs running
   * `"onNoon": "0 12 * * *"` (the test runs everyday)
   * `"onFourteen": "0 12 14 * *"` (the alert for the subscription)
@@ -87,7 +87,7 @@ Alternatively start the server and open the following page:
 foreman run node ./server.js
 ```
 
-Then visit http://localhost:3000/google in your browser.
+Then visit [http://localhost:3000/google](http://localhost:3000/google) in your browser.
 
 This will make a file `.tokens`.
 
