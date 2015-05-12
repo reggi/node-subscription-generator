@@ -57,37 +57,66 @@ Within `package.json` I have a script that will put the variables from `.env` in
 1. Create a `.env` file with the following variables
 
 ```
-CHARGEBEE_API_KEY="{{ your value }}"
-CHARGEBEE_SITE="{{ your value }}"
-GOOGLE_DRIVE_FABIAN_DOC="{{ your value }}"
-GOOGLE_DRIVE_MIKE_DOC="{{ your value }}"
-GOOGLE_DRIVE_UPLOAD_PARENT_ID="{{ your value }}"
-GOOGLE_DRIVE_WEB_CLIENT_ID="{{ your value }}"
-GOOGLE_DRIVE_WEB_CLIENT_SECRET="{{ your value }}"
-GOOGLE_DRIVE_WEB_REDIRECT_URI="{{ your value }}"
-GOOGLE_DRIVE_WELCOMEKIT_DOC="{{ your value }}"
-SLACK_IMAGE="{{ your value }}"
-SLACK_KEY="{{ your value }}"
-SLACK_USER="{{ your value }}"
-GD_USER_ACCESS_TOKEN="{{ your value }}"
-GD_USER_TOKEN_TYPE="{{ your value }}"
-GD_USER_EXPIRY_DATE="{{ your value }}"
-GD_USER_REFRESH_TOKEN="{{ your value }}"
+CHARGEBEE_API_KEY={{ your value }}
+CHARGEBEE_SITE={{ your value }}
+GOOGLE_DRIVE_FABIAN_DOC={{ your value }}
+GOOGLE_DRIVE_MIKE_DOC={{ your value }}
+GOOGLE_DRIVE_UPLOAD_PARENT_ID={{ your value }}
+GOOGLE_DRIVE_WELCOMEKIT_DOC={{ your value }}
+GOOGLE_DRIVE_WEB_CLIENT_ID={{ your value }}
+GOOGLE_DRIVE_WEB_CLIENT_SECRET={{ your value }}
+GOOGLE_DRIVE_WEB_REDIRECT_URI={{ your value }}
+SLACK_IMAGE={{ your value }}
+SLACK_KEY={{ your value }}
+SLACK_USER={{ your value }}
 ```
 
-2. Create a Heroku project
+3. Getting Google User Credentials
+
+The project includes a `server.js` file that sets up a simple server it uses the `GOOGLE_DRIVE_WEB_` credentials to set up a connection to google drive and redirect callback url.
+
+Run the server with the following command:
+
+```
+npm run drive
+```
+
+Alternatively start the server and open the following page:
+
+```
+foreman run node ./server.js
+```
+
+Then visit http://localhost:3000/google in your browser.
+
+This will make a file `.tokens`.
+
+```
+GD_USER_ACCESS_TOKEN={{ your value }}
+GD_USER_TOKEN_TYPE={{ your value }}
+GD_USER_EXPIRY_DATE={{ your value }}
+GD_USER_REFRESH_TOKEN={{ your value }}
+```
+
+You can append this to the `.env` file with the following command:
+
+```
+cat .tokens >> .env
+```
+
+4. Create a Heroku project
 
 ```
 heroku create
 ```
 
-3. Push the .env variables
+5. Push the .env variables
 
 ```
 heroku config:push
 ```
 
-4. Deploy
+6. Deploy
 
 ```
 git push heroku master

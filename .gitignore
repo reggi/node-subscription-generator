@@ -4,3 +4,4 @@ welcomekit.json
 tokens.json
 client_secrets.json
 .env
+.tokens
