@@ -125,24 +125,41 @@ function theRundown(flag){
     debug("generating datespans")
     var data = {}
     data.docs = docs
-    data.dates = {
-      start: false,
-      end: false,
-      today: moment().format("YYMMDD"),
-      yearMonth: moment().add(1, 'months').format("YYMM"),
-      wordMonth: moment().add(1, 'months').format("MMMM")
-    }
+    data.dates = {}
+
+    data.dates.startMoment = false
+    data.dates.startYYMMDD = false
+    data.dates.startMMDDYY = false
+
+    data.dates.endMoment = false
+    data.dates.endYYMMDD = false
+    data.dates.endMMDDYY = false
+
+    data.dates.todayMoment = moment()
+    data.dates.todayYYMMDD = data.dates.todayMoment.format("YYMMDD")
+    data.dates.todayMMDDYY = data.dates.todayMoment.format("MM-DD-YY")
+    data.dates.todayMMDDYYTime = data.dates.todayMoment.format("MM-DD-YY h:mm:ss a")
+
+    data.dates.nextMonth = moment().add(1, 'months')
+    data.dates.nextMonthYYMM = data.dates.nextMonth.format("YYMM")
+    data.dates.nextMonthWordYear = data.dates.nextMonth.format("MMMM YYYY")
+
     if(flag == "welcome-kit"){
+
       var latest = _.last(docs.googleKit)
-      var start = moment(latest.end, "YYMMDD").add(1, "day")
-      var startFmt = start.format("YYMMDD")
-      var end = moment().subtract(1, "day")
-      var endFmt = end.format("YYMMDD")
-      if(startFmt == endFmt) throw new Error("datespan is same day")
-      if(start.isAfter(end)) throw new Error("start is after end")
-      data.dates.start = startFmt
-      data.dates.end = endFmt
-      debug("start date is %s and the end is %s", data.dates.start, data.dates.end)
+
+      data.dates.startMoment = moment(latest.end, "YYMMDD").add(1, "day")
+      data.dates.startYYMMDD = data.dates.startMoment.format("YYMMDD")
+      data.dates.startMMDDYY = data.dates.startMoment.format("MM-DD-YY")
+
+      data.dates.endMoment = data.dates.todayMoment.subtract(1, "day")
+      data.dates.endYYMMDD = data.dates.endMoment.format("YYMMDD")
+      data.dates.endMMDDYY = data.dates.endMoment.format("MM-DD-YY")
+
+      if(data.dates.startYYMMDD == data.dates.endYYMMDD) throw new Error("datespan is same day")
+      if(data.dates.startMoment.isAfter(data.dates.endMoment)) throw new Error("start is after end")
+
+      debug("start date is %s and the end is %s", data.dates.startYYMMDD, data.dates.endYYMMDD)
     }
     return data
   }).then(function(data){
@@ -150,7 +167,7 @@ function theRundown(flag){
     return getSubs().tap(function(subs){
       debug("fetched chargebee subs")
     })
-    .then(filterSubs(data.dates.start, data.dates.end))
+    .then(filterSubs(data.dates.startYYMMDD, data.dates.endYYMMDD))
     .then(function(subs){
       data.chargebee = subs
       return data
@@ -161,14 +178,18 @@ function theRundown(flag){
     data.exports.main = {}
     var content = _.map(data.chargebee.valid, formatSub)
     content = _.map(content, function(row){
-      if(flag !== "welcome-kit") row["sku"] = "GCINTR-001"
+      if(flag == "welcome-kit") row["sku"] = "GCINTR-001"
       delete row["subscription.id"]
       return row
     })
+
     data.exports.main.content = content
-    var kitName = util.format("Welcome Kits %s-%s (On %s)", data.dates.start, data.dates.end, data.dates.today)
-    var subsName = util.format("Subscriptions Final %s (For %s) (On %s)", data.dates.yearMonth, data.dates.wordMonth, data.dates.today)
+
+    var subsName = util.format("Subscriptions for %s (Exported %s)", data.dates.nextMonthWordYear, data.dates.todayMMDDYYTime)
+    var kitName = util.format("Welcome Kits for %s to %s (Exported %s)", data.dates.startMMDDYY, data.dates.endMMDDYY, data.dates.todayMMDDYYTime)
+    
     data.exports.main.name = (flag !== "welcome-kit") ? subsName : kitName
+
     return data
   }).then(function(data){
     // get counts
@@ -195,7 +216,10 @@ function theRundown(flag){
   }).then(function(data){
     //export kit update for kits only
     if(flag !== "welcome-kit") return data
-    data.docs.googleKit.push(data.dates)
+    data.docs.googleKit.push({
+      "start": data.dates.startYYMMDD,
+      "end": data.dates.endYYMMDD
+    })
     data.exports.updateKit = {}
     data.exports.updateKit.content = data.docs.googleKit
     data.exports.updateKit.name = "Welcome Kit Dates Storage database"
@@ -245,16 +269,16 @@ function theRundown(flag){
 
     // email message
     var emailMessage = []
-    emailMessage.push(theHeadline)
+    //emailMessage.push(theHeadline)
     emailMessage.push(theMessage+"\n")
-    emailMessage.push("Generated file '"+ data.exports.main.name +"':")
-    emailMessage.push(data.responses.main.alternateLink)
+    //emailMessage.push("Generated file '"+ data.exports.main.name +"':")
+    //emailMessage.push(data.responses.main.alternateLink)
     emailMessage = emailMessage.join("\n")
 
     return Promise.all([
       server.sendAsync({
         text: emailMessage,
-        from: "Bot <bot@holstee.com>",
+        from: "Thombot <bot@holstee.com>",
         to: theEmail,
         subject: data.exports.main.name,
         attachment: [
