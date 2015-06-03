@@ -12,6 +12,16 @@ var fs = Promise.promisifyAll(require("fs"))
 var csv = Promise.promisifyAll(require("csv"))
 var getAuthClient = require("./auth-client")
 var google = require('googleapis')
+var email = require("emailjs")
+
+var server = email.server.connect({
+   user: process.env.EMAIL_USER,
+   password: process.env.EMAIL_PASSWORD,
+   host: process.env.EMAIL_HOST,
+   ssl: true
+})
+
+server.sendAsync = Promise.promisify(server.send)
 
 var uloadparent = process.env.GOOGLE_DRIVE_UPLOAD_PARENT_ID
 var fabiandoc = process.env.GOOGLE_DRIVE_FABIAN_DOC
@@ -106,8 +116,8 @@ function theRundown(flag){
     debug("retrieved google access token")
     return Promise.props({
       "googleKit": driveGetAndParse(drive, kitdoc, "Welcome Kit DB"),
-      "googleMike": driveGetAndParse(drive, mikedoc, "Mike's"),
-      "googleFabian": driveGetAndParse(drive, fabiandoc, "Fabian's")
+      //"googleMike": driveGetAndParse(drive, mikedoc, "Mike's"),
+      //"googleFabian": driveGetAndParse(drive, fabiandoc, "Fabian's")
     })
   })
   .then(function(docs){
@@ -151,31 +161,25 @@ function theRundown(flag){
     data.exports.main = {}
     var content = _.map(data.chargebee.valid, formatSub)
     content = _.map(content, function(row){
+      if(flag !== "welcome-kit") row["sku"] = "GCINTR-001"
       delete row["subscription.id"]
-      return row;
+      return row
     })
     data.exports.main.content = content
-    if(flag !== "welcome-kit"){
-      data.exports.main.content = _.flatten([
-        _.map(data.chargebee.valid, formatSub),
-        data.docs.googleMike,
-        data.docs.googleFabian
-      ])
-    }
     var kitName = util.format("Welcome Kits %s-%s (On %s)", data.dates.start, data.dates.end, data.dates.today)
     var subsName = util.format("Subscriptions Final %s (For %s) (On %s)", data.dates.yearMonth, data.dates.wordMonth, data.dates.today)
-    data.exports.main.name = (flag == "welcome-kit") ? kitName : subsName
+    data.exports.main.name = (flag !== "welcome-kit") ? subsName : kitName
     return data
   }).then(function(data){
     // get counts
     var counts = {}
-    counts["custom fabian"] = _.size(data.docs.googleFabian)
-    counts["custom mike"] = _.size(data.docs.googleMike)
+    //counts["custom fabian"] = _.size(data.docs.googleFabian)
+    //counts["custom mike"] = _.size(data.docs.googleMike)
     _.each(data.chargebee, function(val, key){
       counts["chargebee "+key] = _.size(val)
     })
     counts["complete export"] =  _.size(data.exports.main.content)
-    counts["total wholesale"] = _.size(data.docs.googleFabian) + _.size(data.docs.googleMike)
+    //counts["total wholesale"] = _.size(data.docs.googleFabian) + _.size(data.docs.googleMike)
     data.counts = _.map(counts, function(val, key){
       var temp = {}
       temp["id"] = key
@@ -218,18 +222,56 @@ function theRundown(flag){
         return data
       })
   }).then(function(data){
-    var message = []
-    message.push("Hey @tylea @reggi")
-    var headline = (flag == "welcome-kit") ? "Welcome Kits are in!" : "Subscriptions are in!"
-    message.push(headline)
+
+    var theHeadline = (flag == "welcome-kit") ? "Welcome Kits are in!" : "Subscriptions are in!"
+
+    var msgWelcomeKits = "Attached are the new Welcome Kits for new Art Subscribers this past week."
+    var msgSubscription = "Attached are the Subscriptions for this month."
+    var theMessage =  (flag == "welcome-kit") ? msgWelcomeKits : msgSubscription
+
+    var emailWelcomeKits = "Welcome Kit <welcomekits@holstee.com>"
+    var emailSubscription = "Monthly Subscribtions <monthlysubscribtions@holstee.com>"
+    var theEmail = (flag == "welcome-kit") ? emailWelcomeKits : emailSubscription
+
+    // slack message
+    var slackMessage = []
+    slackMessage.push("Hey @daverad")
+    slackMessage.push(theHeadline)
     _.each(data.responses, function(response, name){
-      message.push("Generated file '"+ name +"'")
-      message.push(response.alternateLink)
+      slackMessage.push("Generated file '"+ name +"'")
+      slackMessage.push(response.alternateLink)
     })
-    message = message.join("\n")
-    return sendMessage("#subscription", message).tap(function(body){
-      if(body.ok) debug("sent to slack")
-    })
+    slackMessage = slackMessage.join("\n")
+
+    // email message
+    var emailMessage = []
+    emailMessage.push(theHeadline)
+    emailMessage.push(theMessage+"\n")
+    emailMessage.push("Generated file '"+ data.exports.main.name +"':")
+    emailMessage.push(data.responses.main.alternateLink)
+    emailMessage = emailMessage.join("\n")
+
+    return Promise.all([
+      server.sendAsync({
+        text: emailMessage,
+        from: "Bot <bot@holstee.com>",
+        to: theEmail,
+        subject: data.exports.main.name,
+        attachment: [
+          {
+            type: "text/csv",
+            name: data.exports.main.name + ".csv",
+            data: data.exports.main.content,
+          },
+        ]
+      }).tap(function(){
+        return debug("email sent")
+      }),
+      sendMessage("#subscription", slackMessage).tap(function(){
+        return debug("slack message sent")
+      })
+    ])
+
   })
 }
 
