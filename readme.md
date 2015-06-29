@@ -2,7 +2,7 @@
 
 > Cron + Chargebee + Google Drive + Slack
 
-This is a pice of software I made to automate some of the more manual tasks that take place behind the scenes at the Holstee office.
+This is a piece of software I made to automate some of the more manual tasks that take place behind the scenes at the Holstee office.
 
 At Holstee we have a product we offer called the [Mindful Art Subscription](https://www.holstee.com/pages/subscription) it's a service where we mail you a greeting card on a monthly basis.
 
