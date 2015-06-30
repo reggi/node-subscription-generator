@@ -254,7 +254,7 @@ function theRundown(flag){
     var theMessage =  (flag == "welcome-kit") ? msgWelcomeKits : msgSubscription
 
     var emailWelcomeKits = "Welcome Kit <welcomekits@holstee.com>"
-    var emailSubscription = "Monthly Subscribtions <monthlysubscribtions@holstee.com>"
+    var emailSubscription = "Monthly Subscriptions <monthlysubscribtions@holstee.com>"
     var theEmail = (flag == "welcome-kit") ? emailWelcomeKits : emailSubscription
 
     // slack message
