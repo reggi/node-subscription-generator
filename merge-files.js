@@ -187,7 +187,7 @@ function theRundown(flag){
 
     var subsName = util.format("Subscriptions for %s (Exported %s)", data.dates.nextMonthWordYear, data.dates.todayMMDDYYTime)
     var kitName = util.format("Welcome Kits for %s to %s (Exported %s)", data.dates.startMMDDYY, data.dates.endMMDDYY, data.dates.todayMMDDYYTime)
-    
+
     data.exports.main.name = (flag !== "welcome-kit") ? subsName : kitName
 
     return data
@@ -259,7 +259,7 @@ function theRundown(flag){
 
     // slack message
     var slackMessage = []
-    slackMessage.push("Hey @daverad")
+    slackMessage.push("Hey @channel")
     slackMessage.push(theHeadline)
     _.each(data.responses, function(response, name){
       slackMessage.push("Generated file '"+ name +"'")

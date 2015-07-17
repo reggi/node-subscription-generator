@@ -29,7 +29,7 @@ var job = new CronJob({
     // runs every 14th
     var sendMessage = require("./sendMessage")
     var message = [
-      "@pforti @michaelrad @tylea @reggi",
+      "Hey @channel,",
       "subscriptions",
       "are going to be generated noon tomorrow."
     ].join(" ")
@@ -55,7 +55,7 @@ var job = new CronJob({
     // runs every 14th
     var sendMessage = require("./sendMessage")
     var message = [
-      "@tylea @reggi",
+      "Hey @channel,",
       "welcome kits",
       "are going to be generated noon tomorrow."
     ].join(" ")
